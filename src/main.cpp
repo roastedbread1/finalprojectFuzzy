@@ -164,7 +164,7 @@ double evaluate(double jarak, double kecepatan) {
 
 	double m_kecepatan_lambat = membership_kecepatan_lambat(kecepatan);
 	double m_kecepatan_sedang = membership_kecepatan_sedang(kecepatan);
-	double m_kecepatan_jauh = membership_kecepatan_cepat(kecepatan);
+	double m_kecepatan_cepat = membership_kecepatan_cepat(kecepatan);
 
 	// RULES:
 
