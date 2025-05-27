@@ -99,20 +99,23 @@ double membership_kecepatan_cepat(double x) {
 	return (x - CEPAT_MIN) / (CEPAT_MAX - CEPAT_MIN);
 }
 
-
+double mid_membershp_akselerasi_gas = (LAMBAT_MIN + LAMBAT_MAX) / 2;
 double membership_akselerasi_gas(double x)
 {
 	if (x <= LAMBAT_MIN) return 1.0;
 	if (x >= LAMBAT_MAX) return 0.0;
 	return (LAMBAT_MAX - x) / (LAMBAT_MAX - LAMBAT_MIN);
 }
-double membership_akselerasi_do_nothing(double x)
+
+double mid_membershp_akselerasi_noop = (SEDANG_MIN + SEDANG_MAX) / 2;
+double membership_akselerasi_noop(double x)
 {
 	if (x <= SEDANG_MIN || x >= SEDANG_MAX) return 0.0;
 	if (x <= SEDANG_PEAK) return (x - SEDANG_MIN) / (SEDANG_PEAK - SEDANG_MIN);
 	return (SEDANG_MAX - x) / (SEDANG_MAX - SEDANG_PEAK);
 }
 
+double mid_membershp_akselerasi_brake = (CEPAT_MIN + CEPAT_MAX) / 2;
 double membership_akselerasi_brake(double x)
 {
 	if (x <= CEPAT_MIN) return 0.0;
@@ -166,31 +169,26 @@ double evaluate(double jarak, double kecepatan) {
 	//(cepat & jauh) -> noop
 	double c9 = tnorm(m_kecepatan_cepat, m_jarak_jauh);
 
-	auto m_y = [&](double y) {
-		return max_variadic(
-			fmin(c1, membership_akselerasi_do_nothing(y)),
-			fmin(c2, membership_akselerasi_gas(y)),
-			fmin(c3, membership_akselerasi_gas(y)),
-			fmin(c4, membership_akselerasi_brake(y)),
-			fmin(c5, membership_akselerasi_do_nothing(y)),
-			fmin(c6, membership_akselerasi_gas(y)),
-			fmin(c7, membership_akselerasi_brake(y)),
-			fmin(c8, membership_akselerasi_brake(y)),
-			fmin(c9, membership_akselerasi_do_nothing(y))
-		);
-	};
+	// defuzzification: center of average
+	double num =
+		(c1 + c5 + c9) * mid_membershp_akselerasi_noop +
+		(c2 + c3 + c6) * mid_membershp_akselerasi_gas +
+		(c4 + c7 + c8) * mid_membershp_akselerasi_brake;
 
-	return 0.0;
+	// karena setiap membership function selalu ada yang nilainya 1, maka jika dikali Q hasilnya adalah Q
+	double den = c1 + c2 + c3 + c4 + c5 + c6 + c7 + c8 + c9;
+
+	return num / den;
 }
 
 
 int main()
 {
-	double jarak = 0;
-	double kecepatan = 0;
+	double jarak = 8;
+	double kecepatan = 22;
+
+	double akselerasi = evaluate(jarak, kecepatan);
 
 
-
-
-	std::cout << "mobil";
+	std::cout << "mobil gas " << akselerasi;
 }
