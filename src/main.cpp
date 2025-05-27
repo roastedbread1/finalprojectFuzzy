@@ -169,6 +169,17 @@ double evaluate(double jarak, double kecepatan) {
 	//(cepat & jauh) -> noop
 	double c9 = tnorm(m_kecepatan_cepat, m_jarak_jauh);
 
+	std::cout
+		<< c1 << ", "
+		<< c2 << ", "
+		<< c3 << ", "
+		<< c4 << ", "
+		<< c5 << ", "
+		<< c6 << ", "
+		<< c7 << ", "
+		<< c8 << ", "
+		<< c9 << "\n";
+
 	// defuzzification: center of average
 	double num =
 		(c1 + c5 + c9) * mid_membershp_akselerasi_noop +
@@ -178,14 +189,14 @@ double evaluate(double jarak, double kecepatan) {
 	// karena setiap membership function selalu ada yang nilainya 1, maka jika dikali Q hasilnya adalah Q
 	double den = c1 + c2 + c3 + c4 + c5 + c6 + c7 + c8 + c9;
 
-	return num / den;
+	return den != 0 ? num / den : 0;
 }
 
 
 int main()
 {
-	double jarak = 8;
-	double kecepatan = 22;
+	double jarak = 42;
+	double kecepatan = 63;
 
 	double akselerasi = evaluate(jarak, kecepatan);
 
