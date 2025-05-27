@@ -1,6 +1,8 @@
 #include <iostream>
 #include <cmath>
 
+#define DELTA 0.01
+
 #define STOP_SPEED  0.0
 #define LAMBAT_MIN  40.0
 #define LAMBAT_MAX  60.0
@@ -20,6 +22,15 @@ double lukasiewicz(double a, double b);
 double godel(double a, double b);
 double mamdani_min(double a, double b);
 double mamdani_product(double a, double b)*/;
+
+double integral(double xFrom, double xTo, double(*fn)(double)) {
+	double sum = 0;
+	for (double x = xFrom; x < xTo; x += DELTA) {
+		sum += fn(x);
+	}
+	return sum;
+}
+
 
 double tnorm(double a, double b) {
 	return fmin(a, b);
