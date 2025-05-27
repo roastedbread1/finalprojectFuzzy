@@ -167,7 +167,32 @@ double evaluate(double jarak, double kecepatan) {
 	double m_kecepatan_cepat = membership_kecepatan_cepat(kecepatan);
 
 	// RULES:
+	//IF lambat AND dekat THEN NOOP
+	double rule1 = tnorm(m_kecepatan_lambat, m_jarak_dekat);
 
+	//IF lambat AND sedang THEN gas
+	double rule2 = tnorm(m_kecepatan_lambat, m_jarak_sedang);
+
+	//IF lambat AND jauh THEN gas
+	double rule3 = tnorm(m_kecepatan_lambat, m_jarak_jauh);
+
+	//IF sedang AND dekat THEN rem
+	double rule4 = tnorm(m_kecepatan_sedang, m_jarak_dekat);
+
+	//IF sedang AND sedang THEN noop
+	double rule5 = tnorm(m_kecepatan_sedang, m_jarak_sedang);
+
+	//IF sedang AND jauh THEN gas
+	double rule6 = tnorm(m_kecepatan_sedang, m_jarak_jauh);
+
+	//IF cepat AND dekat THEN rem
+	double rule7 = tnorm(m_kecepatan_cepat, m_jarak_dekat);
+
+	//IF cepat AND sedang THEN rem
+	double rule8 = tnorm(m_kecepatan_cepat, m_jarak_sedang);
+
+	//IF cepat AND jauh THEN noop
+	double rule9 = tnorm(m_kecepatan_cepat, m_jarak_jauh);
 
 
 	// To do: defuzzifier centroid.
