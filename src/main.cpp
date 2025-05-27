@@ -16,12 +16,6 @@ double tnorm(double a, double b);
 double snorm(double a, double b);
 double complement(double a);
 double implication(double a, double b);
-/*double zadeh(double a, double b);
-double dienes_rescher(double a, double b);
-double lukasiewicz(double a, double b);
-double godel(double a, double b);
-double mamdani_min(double a, double b);
-double mamdani_product(double a, double b)*/;
 
 double integral(double xFrom, double xTo, double(*fn)(double)) {
 	double sum = 0;
@@ -48,37 +42,6 @@ double implication(double a, double b)
 {
 	return fmin(a, b);
 }
-
-//double zadeh(double a, double b)
-//{
-//	return fmax(fmin(a, b), complement(b));
-//}
-//
-//double dienes_rescher(double a, double b)
-//{
-//	return fmax(complement(a), b);
-//}
-//
-//double lukasiewicz(double a, double b)
-//{
-//	return fmin(1, 1-(a+b));
-//}
-//
-//double godel(double a, double b)
-//{
-//	if (a < b) return 1;
-//	else return b;
-//}
-
-double mamdani_min(double a, double b)
-{
-	return fmin(a, b);
-}
-
-//double mamdani_product(double a, double b)
-//{
-//	return a*b;
-//}
 
 // Jarak terhadap sesuatu di depan mobil.
 // Input: x dalam meter.
