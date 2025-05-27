@@ -17,6 +17,10 @@ double snorm(double a, double b);
 double complement(double a);
 double implication(double a, double b);
 
+static double gas = 0.0;
+static double noop = 0.0;
+static double rem = 0.0;
+
 double integral(double xFrom, double xTo, double(*fn)(double)) {
 	double sum = 0;
 	for (double x = xFrom; x < xTo; x += DELTA) {
@@ -118,7 +122,29 @@ double membership_akselerasi_brake(double x)
 	SEDANG	REM		NOOP	GAS
 	CEPAT	REM		REM		NOOP
 */
+double clipped_gas(double x)
+{
+	return fmin(gas, membership_akselerasi_gas(x));
+}
 
+double clipped_noop(double x)
+{
+	return fmin(noop, membership_akselerasi_do_nothing(x));
+}
+double clipped_rem(double x)
+{
+	return fmin(rem, membership_akselerasi_brake(x));
+}
+
+double combined_output(double x)
+{
+	return (fmax(fmax(clipped_gas(x), clipped_noop(x)), clipped_rem(x)));
+}
+
+double numerator_func(double x)
+{
+	return x * combined_output(x);
+}
 double evaluate(double jarak, double kecepatan) {
 
 	double m_jarak_dekat = membership_jarak_dekat(jarak);
@@ -157,11 +183,19 @@ double evaluate(double jarak, double kecepatan) {
 	//IF cepat AND jauh THEN noop
 	double rule9 = tnorm(m_kecepatan_cepat, m_jarak_jauh);
 
+	//aggregate
+	gas = snorm(snorm(rule2, rule3), rule6);
+	noop = snorm(snorm(rule1, rule5), snorm(rule8, rule9));
+	rem = snorm(rule4, rule7);
 
+	double numerator = integral(0, 120, numerator_func);
+	double denominator = integral(0, 120, combined_output);
+
+	if (denominator == 0) return 60;
 	// To do: defuzzifier centroid.
+	
 
-
-	return 0;
+	return numerator/denominator;
 }
 
 
