@@ -72,22 +72,23 @@ double mamdani_product(double a, double b)
 // Jarak terhadap sesuatu di depan mobil.
 // Input: x dalam meter.
 double membership_jarak_dekat(double x) {
-
-
-	return 0;
+	if (x <= LAMBAT_MIN) return 1.0;
+	if (x >= LAMBAT_MAX) return 0.0;
+	return (LAMBAT_MAX - x) / (LAMBAT_MAX - LAMBAT_MIN);
 }
 
 double membership_jarak_sedang(double x) {
-	return 0;
+	if (x <= SEDANG_MIN || x >= SEDANG_MAX) return 0.0;
+	if (x <= SEDANG_PEAK) return (x - SEDANG_MIN) / (SEDANG_PEAK - SEDANG_MIN);
+	return (SEDANG_MAX - x) / (SEDANG_MAX - SEDANG_PEAK);
 }
 
 double membership_jarak_jauh(double x) {
-	return 0;
+	if (x <= CEPAT_MIN) return 0.0;
+	if (x >= CEPAT_MAX) return 1.0;
+	return (x - CEPAT_MIN) / (CEPAT_MAX - CEPAT_MIN);
 }
 
-double membership_jarak_jauuuuuh(double x) {
-	return 0;
-}
 
 // Kecepatan mobil saat ini.
 // Input: x dalam meter / detik.
@@ -114,6 +115,25 @@ double membership_kecepatan_cepat(double x) {
 	return (x - CEPAT_MIN) / (CEPAT_MAX - CEPAT_MIN);
 }
 
+
+double membership_akselerasi_gas(double x)
+{
+	if (x <= LAMBAT_MIN) return 1.0;
+	if (x >= LAMBAT_MAX) return 0.0;
+	return (LAMBAT_MAX - x) / (LAMBAT_MAX - LAMBAT_MIN);
+}
+double membership_akselerasi_do_nothing(double x)
+{
+	if (x <= SEDANG_MIN || x >= SEDANG_MAX) return 0.0;
+	if (x <= SEDANG_PEAK) return (x - SEDANG_MIN) / (SEDANG_PEAK - SEDANG_MIN);
+	return (SEDANG_MAX - x) / (SEDANG_MAX - SEDANG_PEAK);
+}
+double membership_akselerasi_brake(double x)
+{
+	if (x <= CEPAT_MIN) return 0.0;
+	if (x >= CEPAT_MAX) return 1.0;
+	return (x - CEPAT_MIN) / (CEPAT_MAX - CEPAT_MIN);
+}
 int main()
 {
 	std::cout << "mobil";
