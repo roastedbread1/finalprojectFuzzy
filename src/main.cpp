@@ -147,6 +147,22 @@ double membership_akselerasi_brake(double x)
 
 double evaluate(double jarak, double kecepatan) {
 
+	double m_jarak_dekat = membership_jarak_dekat(jarak);
+	double m_jarak_sedang = membership_jarak_sedang(jarak);
+	double m_jarak_jauh = membership_jarak_jauh(jarak);
+
+	double m_kecepatan_lambat = membership_kecepatan_lambat(kecepatan);
+	double m_kecepatan_sedang = membership_kecepatan_sedang(kecepatan);
+	double m_kecepatan_jauh = membership_kecepatan_cepat(kecepatan);
+
+	// RULES:
+
+
+
+	// To do: defuzzifier centroid.
+
+
+	return 0;
 }
 
 
