@@ -14,12 +14,12 @@ double tnorm(double a, double b);
 double snorm(double a, double b);
 double complement(double a);
 double implication(double a, double b);
-double zadeh(double a, double b);
+/*double zadeh(double a, double b);
 double dienes_rescher(double a, double b);
 double lukasiewicz(double a, double b);
 double godel(double a, double b);
 double mamdani_min(double a, double b);
-double mamdani_product(double a, double b);
+double mamdani_product(double a, double b)*/;
 
 double tnorm(double a, double b) {
 	return fmin(a, b);
@@ -35,39 +35,39 @@ double complement(double a) {
 
 double implication(double a, double b)
 {
-	return 0.0;
+	return fmin(a, b);
 }
 
-double zadeh(double a, double b)
-{
-	return fmax(fmin(a, b), complement(b));
-}
-
-double dienes_rescher(double a, double b)
-{
-	return fmax(complement(a), b);
-}
-
-double lukasiewicz(double a, double b)
-{
-	return fmin(1, 1-(a+b));
-}
-
-double godel(double a, double b)
-{
-	if (a < b) return 1;
-	else return b;
-}
+//double zadeh(double a, double b)
+//{
+//	return fmax(fmin(a, b), complement(b));
+//}
+//
+//double dienes_rescher(double a, double b)
+//{
+//	return fmax(complement(a), b);
+//}
+//
+//double lukasiewicz(double a, double b)
+//{
+//	return fmin(1, 1-(a+b));
+//}
+//
+//double godel(double a, double b)
+//{
+//	if (a < b) return 1;
+//	else return b;
+//}
 
 double mamdani_min(double a, double b)
 {
 	return fmin(a, b);
 }
 
-double mamdani_product(double a, double b)
-{
-	return a*b;
-}
+//double mamdani_product(double a, double b)
+//{
+//	return a*b;
+//}
 
 // Jarak terhadap sesuatu di depan mobil.
 // Input: x dalam meter.
@@ -128,13 +128,35 @@ double membership_akselerasi_do_nothing(double x)
 	if (x <= SEDANG_PEAK) return (x - SEDANG_MIN) / (SEDANG_PEAK - SEDANG_MIN);
 	return (SEDANG_MAX - x) / (SEDANG_MAX - SEDANG_PEAK);
 }
+
 double membership_akselerasi_brake(double x)
 {
 	if (x <= CEPAT_MIN) return 0.0;
 	if (x >= CEPAT_MAX) return 1.0;
 	return (x - CEPAT_MIN) / (CEPAT_MAX - CEPAT_MIN);
 }
+
+
+// RULES:
+/*
+			DEKAT	SEDANG	JAUH
+	LAMBAT	NOOP	GAS		GAS
+	SEDANG	REM		NOOP	GAS
+	CEPAT	REM		REM		NOOP
+*/
+
+double evaluate(double jarak, double kecepatan) {
+
+}
+
+
 int main()
 {
+	double jarak = 0;
+	double kecepatan = 0;
+
+
+
+
 	std::cout << "mobil";
 }
