@@ -12,6 +12,23 @@
 #define CEPAT_MIN 80.0
 #define CEPAT_MAX 120.0
 
+#define DEKAT_MIN  10.0
+#define DEKAT_MAX  30.0
+#define JSEDANG_MIN  10.0
+#define JSEDANG_PEAK  30.0
+#define JSEDANG_MAX  50.0
+#define JAUH_MIN 30.0
+#define JAUH_MAX 50.0
+
+
+#define REM_MIN -10.0
+#define REM_MAX 0.0
+#define NOOP_MIN -10.0
+#define NOOP_PEAK 0
+#define NOOP_MAX 10.0
+#define GAS_MIN 0.0
+#define GAS_MAX 10.0
+
 double tnorm(double a, double b);
 double snorm(double a, double b);
 double complement(double a);
@@ -56,21 +73,21 @@ double implication(double a, double b)
 // Jarak terhadap sesuatu di depan mobil.
 // Input: x dalam meter.
 double membership_jarak_dekat(double x) {
-	if (x <= LAMBAT_MIN) return 1.0;
-	if (x >= LAMBAT_MAX) return 0.0;
-	return (LAMBAT_MAX - x) / (LAMBAT_MAX - LAMBAT_MIN);
+	if (x <= DEKAT_MIN) return 1.0;
+	if (x >= DEKAT_MAX) return 0.0;
+	return (DEKAT_MAX - x) / (DEKAT_MAX - DEKAT_MIN);
 }
 
 double membership_jarak_sedang(double x) {
-	if (x <= SEDANG_MIN || x >= SEDANG_MAX) return 0.0;
-	if (x <= SEDANG_PEAK) return (x - SEDANG_MIN) / (SEDANG_PEAK - SEDANG_MIN);
-	return (SEDANG_MAX - x) / (SEDANG_MAX - SEDANG_PEAK);
+	if (x <= JSEDANG_MIN || x >= JSEDANG_MAX) return 0.0;
+	if (x <= JSEDANG_PEAK) return (x - JSEDANG_MIN) / (JSEDANG_PEAK - JSEDANG_MIN);
+	return (JSEDANG_MAX - x) / (JSEDANG_MAX - JSEDANG_PEAK);
 }
 
 double membership_jarak_jauh(double x) {
-	if (x <= CEPAT_MIN) return 0.0;
-	if (x >= CEPAT_MAX) return 1.0;
-	return (x - CEPAT_MIN) / (CEPAT_MAX - CEPAT_MIN);
+	if (x <= JAUH_MIN) return 0.0;
+	if (x >= JAUH_MAX) return 1.0;
+	return (x - JAUH_MIN) / (JAUH_MAX - JAUH_MIN);
 }
 
 
@@ -99,28 +116,28 @@ double membership_kecepatan_cepat(double x) {
 	return (x - CEPAT_MIN) / (CEPAT_MAX - CEPAT_MIN);
 }
 
-double mid_membershp_akselerasi_gas = (LAMBAT_MIN + LAMBAT_MAX) / 2;
+double mid_membershp_akselerasi_gas = (GAS_MIN + GAS_MAX) / 2;
 double membership_akselerasi_gas(double x)
 {
-	if (x <= LAMBAT_MIN) return 1.0;
-	if (x >= LAMBAT_MAX) return 0.0;
-	return (LAMBAT_MAX - x) / (LAMBAT_MAX - LAMBAT_MIN);
+	if (x <= GAS_MIN) return 1.0;
+	if (x >= GAS_MAX) return 0.0;
+	return (GAS_MAX - x) / (GAS_MAX - GAS_MIN);
 }
 
-double mid_membershp_akselerasi_noop = (SEDANG_MIN + SEDANG_MAX) / 2;
+double mid_membershp_akselerasi_noop = (NOOP_MIN + NOOP_MAX) / 2;
 double membership_akselerasi_noop(double x)
 {
-	if (x <= SEDANG_MIN || x >= SEDANG_MAX) return 0.0;
-	if (x <= SEDANG_PEAK) return (x - SEDANG_MIN) / (SEDANG_PEAK - SEDANG_MIN);
-	return (SEDANG_MAX - x) / (SEDANG_MAX - SEDANG_PEAK);
+	if (x <= NOOP_MIN || x >= NOOP_MAX) return 0.0;
+	if (x <= NOOP_PEAK) return (x - NOOP_MIN) / (NOOP_PEAK - NOOP_MIN);
+	return (NOOP_MAX - x) / (NOOP_MAX - NOOP_PEAK);
 }
 
-double mid_membershp_akselerasi_brake = (CEPAT_MIN + CEPAT_MAX) / 2;
+double mid_membershp_akselerasi_brake = (REM_MIN + REM_MAX) / 2;
 double membership_akselerasi_brake(double x)
 {
-	if (x <= CEPAT_MIN) return 0.0;
-	if (x >= CEPAT_MAX) return 1.0;
-	return (x - CEPAT_MIN) / (CEPAT_MAX - CEPAT_MIN);
+	if (x <= REM_MIN) return 0.0;
+	if (x >= REM_MAX) return 1.0;
+	return (x - REM_MIN) / (REM_MAX - REM_MIN);
 }
 
 // RULES:
@@ -189,17 +206,19 @@ double evaluate(double jarak, double kecepatan) {
 	// karena setiap membership function selalu ada yang nilainya 1, maka jika dikali Q hasilnya adalah Q
 	double den = c1 + c2 + c3 + c4 + c5 + c6 + c7 + c8 + c9;
 
+
 	return den != 0 ? num / den : 0;
 }
 
-
 int main()
 {
-	double jarak = 42;
-	double kecepatan = 63;
+	double jarak = 0;
+	double kecepatan = 100;
 
 	double akselerasi = evaluate(jarak, kecepatan);
 
-
-	std::cout << "mobil gas " << akselerasi;
+	char* status = (akselerasi > 0) ? "gas" 
+		: (akselerasi < 0) ? "rem" 
+		: "noop";
+	std::cout << "mobil " << status << ": " << akselerasi;
 }
